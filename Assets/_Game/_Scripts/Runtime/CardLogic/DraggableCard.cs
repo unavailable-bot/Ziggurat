@@ -40,7 +40,9 @@ namespace Runtime.CardLogic
                 Vector3 targetPosition = new Vector3(mousePosition.x, mousePosition.y, this.transform.position.z);
                 transform.position = Vector3.Lerp(this.transform.position, targetPosition, Time.deltaTime * 20f);
                 if (Input.GetMouseButtonUp(0))
+                    // ReSharper disable once Unity.PerformanceCriticalCodeInvocation
                     EndDrag();
+                    
             }
         }
 
@@ -59,6 +61,7 @@ namespace Runtime.CardLogic
             Collider2D hit = Physics2D.OverlapPoint(mouseWorldPosition, _callLayerMask);
             if (hit)
             {
+                // ReSharper disable once Unity.PerformanceCriticalCodeInvocation
                 var currentCell  = hit.GetComponent<Cell>();
                 if (currentCell && currentCell.IsEmpty && !currentCell.IsNoTarget) 
                 {

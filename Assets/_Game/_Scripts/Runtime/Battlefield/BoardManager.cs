@@ -8,7 +8,7 @@ namespace Runtime.Battlefield
         private const int HEIGHT = 5;
         private Cell[,] _grid;
 
-        private void Awake()
+        private void Start()
         {
             _grid = new Cell[WIDTH, HEIGHT];
             for (int i = 0; i < this.transform.childCount; i++)
