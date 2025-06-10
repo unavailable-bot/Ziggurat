@@ -60,7 +60,7 @@ namespace Runtime.CardLogic
             if (hit)
             {
                 var currentCell  = hit.GetComponent<Cell>();
-                if (currentCell && currentCell.IsEmpty && !currentCell.IsNoNtarget) 
+                if (currentCell && currentCell.IsEmpty && !currentCell.IsNoTarget) 
                 {
                     currentCell.PlaceCard(this);
                     _attachedCell = currentCell;
@@ -77,7 +77,7 @@ namespace Runtime.CardLogic
             mousePosition.z = _camera.transform.position.z;
             return _camera.ScreenToWorldPoint(mousePosition);
         }
-
+        
         private void OnTriggerStay2D(Collider2D other)
         {
             if (!_inside)

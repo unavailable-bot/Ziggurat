@@ -9,19 +9,18 @@ namespace Runtime.Battlefield
         [SerializeField] private DraggableCard _currentCard;
         
         internal bool IsEmpty => _currentCard == null;
-        private bool isNoNtarget;
-        internal bool IsNoNtarget => isNoNtarget;
+        internal bool IsNoTarget { get; private set; }
 
         internal void SetCoordinates(int x, int y)
         {
             _x = x; _y = y;
         }
 
-        internal void setNoNtargetCell()
+        internal void SetNoTargetCell()
         {
-            if (CompareTag($"NoNtarget"))
+            if (CompareTag($"NoTarget"))
             {
-                isNoNtarget = true;
+                IsNoTarget = true;
             }
         }
 

@@ -18,7 +18,7 @@ namespace Runtime.Battlefield
                 int y = i / WIDTH;
                 currentCell.SetCoordinates(x,y);
                 _grid[x, y] = currentCell;
-                currentCell.setNoNtargetCell();
+                currentCell.SetNoTargetCell();
             }
         }
     }

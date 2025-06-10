@@ -2,7 +2,7 @@ using UnityEngine;
 
 namespace Config
 {
-    public class GameManager : MonoBehaviour
+    public class DisplayConfig : MonoBehaviour
     {
         private Camera _camera;
         
