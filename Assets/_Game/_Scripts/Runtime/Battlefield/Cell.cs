@@ -1,4 +1,5 @@
 using Runtime.CardLogic;
+using Runtime.CardLogic.CardUnits;
 using UnityEngine;
 
 namespace Runtime.Battlefield
@@ -6,16 +7,16 @@ namespace Runtime.Battlefield
     public class Cell : MonoBehaviour
     {
         [SerializeField] private int _x, _y;
-        [SerializeField] private DraggableCard _currentCard;
+        [SerializeField] private GameObject _currentUnit;
         
-        internal bool IsEmpty => _currentCard == null;
+        internal bool IsEmpty => _currentUnit == null;
         internal bool IsNoTarget { get; private set; }
 
         internal void SetCoordinates(int x, int y)
         {
             _x = x; _y = y;
         }
-
+        
         internal void SetNoTargetCell()
         {
             if (CompareTag($"NoTarget"))
@@ -24,17 +25,18 @@ namespace Runtime.Battlefield
             }
         }
 
-        internal bool PlaceCard(DraggableCard card)
+        internal void PlaceCard(GameObject card)
         {
-            if(!IsEmpty) return false;
-            _currentCard = card;
-            card.transform.position = this.transform.position;
-            return true;
+            if(!IsEmpty) return;
+            
+            _currentUnit = card;
+            Vector3 unitPosition = new(this.transform.position.x, this.transform.position.y - 0.3f, this.transform.position.z);
+            Instantiate(_currentUnit, unitPosition, Quaternion.identity);
         }
 
         internal void Clear()
         {
-            _currentCard = null;
+            _currentUnit = null;
         }
     }
 }

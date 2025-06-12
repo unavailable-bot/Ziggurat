@@ -1,14 +1,16 @@
 using UnityEngine;
 using System.Text.RegularExpressions;
 using Core;
+using Runtime.CardLogic.CardUnits;
 
 namespace Runtime.CardLogic
 {
     public class RedNumberCard : DraggableCard
     {
         private int _weight;
+        private GameObject _drawCard;
 
-        internal override int Weight => _weight;
+        protected override int Weight => _weight;
 
         private void Awake()
         {
@@ -18,17 +20,11 @@ namespace Runtime.CardLogic
             if (match.Success)
             {
                 _weight = int.Parse(match.Value);
-                Debug.Log($"CardName: {gameObject.name}, Weight : {_weight}");
             }
             else
             {
                 Debug.LogWarning($"[NumberCardLogic] Не удалось найти число в имени: {gameObject.name}");
             }
-        }
-
-        protected override void OnCardPlaced()
-        {
-            ScoreCounter.I.SetNewScore(Weight);
         }
     }
 }

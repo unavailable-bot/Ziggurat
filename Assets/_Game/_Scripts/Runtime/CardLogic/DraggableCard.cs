@@ -1,22 +1,27 @@
+using Core;
 using Runtime.Battlefield;
 using UnityEngine;
 using DG.Tweening;
+using Runtime.CardLogic.CardUnits;
 
 namespace Runtime.CardLogic
 {
     [RequireComponent(typeof(SpriteRenderer), typeof(BoxCollider2D))]
     public abstract class DraggableCard : MonoBehaviour
     {
-        [SerializeField]private LayerMask _callLayerMask;
+        private Tween _scaleTween;
+        
+        [SerializeField] private LayerMask _callLayerMask;
+        [SerializeField] private GameObject _unit;
         
         private Camera _camera;
         private Vector3 _startPosition;
         private bool _isDragging;
         private bool _inside;
-        internal Cell _attachedCell;
 
-        internal abstract int Weight {get;}
-
+        protected abstract int Weight {get;}
+        protected int Unit {get;}
+        
         private void Start()
         {
             _camera = Camera.main;
@@ -46,7 +51,11 @@ namespace Runtime.CardLogic
             }
         }
 
-        protected abstract void OnCardPlaced();
+        private void OnCardPlaced()
+        {
+            ScoreCounter.I.SetNewScore(Weight);
+            Destroy(this.gameObject);
+        }
 
         private void StartDrag()
         {
@@ -65,12 +74,12 @@ namespace Runtime.CardLogic
                 var currentCell  = hit.GetComponent<Cell>();
                 if (currentCell && currentCell.IsEmpty && !currentCell.IsNoTarget) 
                 {
-                    currentCell.PlaceCard(this);
-                    _attachedCell = currentCell;
+                    currentCell.PlaceCard(_unit);
                     OnCardPlaced();
                     return;
                 }
             }
+            transform.DOScale(1f, 0.15f); // вернём к нормальному масштабу
             transform.position = _startPosition;
         }
 
@@ -83,7 +92,7 @@ namespace Runtime.CardLogic
         
         private void OnTriggerStay2D(Collider2D other)
         {
-            if (!_inside)
+            if (!_inside && _isDragging)
             {
                 Vector3 mouseWorldPosition = GetMouseWorldPosition();
                 Collider2D hit = Physics2D.OverlapPoint(mouseWorldPosition, _callLayerMask);
@@ -97,7 +106,7 @@ namespace Runtime.CardLogic
 
         private void OnTriggerExit2D(Collider2D other)
         {
-            if (other.gameObject.name == "BattleField")
+            if (other.gameObject.name == "BattleField" && _isDragging)
             {
                 transform.DOScale(1f, 0.15f); // вернём к нормальному масштабу
                 _inside = false;

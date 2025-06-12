@@ -22,6 +22,7 @@ namespace Runtime.DeckLogic
         private void Start()
         {
             maxCard = isFirstPlayer ? 5 : 6;
+            Debug.Log($"Color: {PlayerColor} | First player? {isFirstPlayer}");
             GetStartDeck(maxCard);
         }
         

@@ -1,4 +1,3 @@
-using DG.Tweening;
 using Runtime.BankLogic;
 using Runtime.DeckLogic;
 using UnityEngine;
@@ -24,9 +23,9 @@ namespace Core
         {
             I = this;
             
-            DOTween.Clear();
-            
             var firstPlayerColor = (FirstPlayer)Random.Range(0, 2);
+            
+            Debug.Log($"First Player Color: {firstPlayerColor}");
             
             SetBankColor(firstPlayerColor);
             SetFirstPlayer(firstPlayerColor);
@@ -35,10 +34,10 @@ namespace Core
         private void SetFirstPlayer(FirstPlayer color)
         {
             int playerNumber = 1;
-            var firstPlayer = Instantiate(_deckPrefab, new Vector3(0, -12f, 0), _deckPrefab.transform.rotation);
+            var firstPlayer = Instantiate(_deckPrefab, new Vector3(0, -13f, 0), _deckPrefab.transform.rotation);
             firstPlayer.GetComponent<PlayerDeck>().Init((PlayerColor)color, playerNumber++);
 
-            var secondPlayer = Instantiate(_deckPrefab, new Vector3(-2, 12f, 0), _deckPrefab.transform.rotation);
+            var secondPlayer = Instantiate(_deckPrefab, new Vector3(-2, 13f, 0), _deckPrefab.transform.rotation);
             secondPlayer.GetComponent<PlayerDeck>().Init(color == FirstPlayer.Red ? PlayerColor.Blue : PlayerColor.Red, playerNumber);
         }
         

@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
@@ -27,13 +26,13 @@ namespace Runtime.BankLogic
         internal void Init(BankColor color)
         {
             BankColor = color;
+            Debug.Log($"Color: {BankColor}");
             
             _cardBack = gameObject.GetComponentInChildren<SpriteRenderer>();
             _cardBack.sprite = BankColor == BankColor.Red ? _red : _blue;
             
             LoadAllCards();
             ShuffleDeck();
-            Resources.UnloadUnusedAssets(); // сброс неиспользуемых объектов
             // можно добавить Setup: UI, камера и т.д.
         }
         
@@ -46,13 +45,13 @@ namespace Runtime.BankLogic
                 _cardList.Add(card);
                 _cardList.Add(card);
             }
-
-            Debug.Log($"Загружено карт: {loadedCards.Length}, итоговая колода: {_cardList.Count}");
         }
         
         private void ShuffleDeck()
         {
-            _deckQueue = new Queue<GameObject>(_cardList.OrderBy(x => Random.value));
+            _deckQueue = new Queue<GameObject>(_cardList.OrderBy(_ => Random.value));
+            _cardList.Clear();
+            Resources.UnloadUnusedAssets();
         }
         
         internal GameObject DrawCard()
