@@ -1,16 +1,26 @@
 using UnityEngine;
+using System.Text.RegularExpressions;
 
-public class NumUnit : MonoBehaviour
+namespace Runtime.CardLogic.CardUnits
 {
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
+    public class NumUnit : CardUnit
     {
-        
-    }
+        private int _weight;
+        protected override int Weight => _weight;
 
-    // Update is called once per frame
-    void Update()
-    {
-        
+        private void Awake()
+        {
+            if (_weight != 0) return;
+            
+            var match = Regex.Match(gameObject.name, @"\d+");
+            if (match.Success)
+            {
+                _weight = int.Parse(match.Value);
+            }
+            else
+            {
+                Debug.LogWarning($"[NumberCardLogic] Не удалось найти число в имени: {gameObject.name}");
+            }
+        }
     }
 }

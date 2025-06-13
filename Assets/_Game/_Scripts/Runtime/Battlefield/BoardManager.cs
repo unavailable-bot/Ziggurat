@@ -8,12 +8,12 @@ namespace Runtime.Battlefield
         private const int HEIGHT = 5;
         private Cell[,] _grid;
 
-        private void Start()
+        internal void Initialize()
         {
             _grid = new Cell[WIDTH, HEIGHT];
             for (int i = 0; i < this.transform.childCount; i++)
             {
-                Cell currentCell = this.transform.GetChild(i).GetComponent<Cell>();
+                var currentCell = this.transform.GetChild(i).GetComponent<Cell>();
                 int x = i % WIDTH;
                 int y = i / WIDTH;
                 currentCell.SetCoordinates(x,y);

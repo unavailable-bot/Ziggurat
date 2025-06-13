@@ -1,16 +1,8 @@
-using UnityEngine;
-
-public class SCUnit : MonoBehaviour
+namespace Runtime.CardLogic.CardUnits
 {
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
+    public class SCUnit : CardUnit
     {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
+        private const int BASE_WEIGHT = 10;
+        protected override int Weight => BASE_WEIGHT;
     }
 }

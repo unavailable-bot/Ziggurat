@@ -424,6 +424,7 @@ MonoBehaviour:
   _gameManager: {fileID: 405291098}
   _scoreCounter: {fileID: 608201110}
   _displayConfig: {fileID: 519420033}
+  _borderManager: {fileID: 1663328608}
 --- !u!1 &519420028
 GameObject:
   m_ObjectHideFlags: 0
@@ -869,6 +870,17 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1663328608 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 3220661953914784585, guid: bc6f7bf044cd68c44b731a3fb9e1e229, type: 3}
+  m_PrefabInstance: {fileID: 209021923630179574}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 22aa89310b9c0444cacf29f92a5571aa, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &209021923630179574
 PrefabInstance:
   m_ObjectHideFlags: 0

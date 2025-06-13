@@ -1,4 +1,3 @@
-using Core;
 using Runtime.Battlefield;
 using UnityEngine;
 using DG.Tweening;
@@ -6,7 +5,7 @@ using DG.Tweening;
 namespace Runtime.CardLogic
 {
     [RequireComponent(typeof(SpriteRenderer), typeof(BoxCollider2D))]
-    public abstract class DraggableCard : MonoBehaviour
+    public class DraggableCard : MonoBehaviour
     {
         private Tween _scaleTween;
         
@@ -17,8 +16,6 @@ namespace Runtime.CardLogic
         private Vector3 _startPosition;
         private bool _isDragging;
         private bool _inside;
-
-        protected abstract int Weight {get;}
         
         private void Start()
         {
@@ -58,10 +55,11 @@ namespace Runtime.CardLogic
                 EndDrag();
         }
 
-        private void OnCardPlaced()
+        private Vector3 GetMouseWorldPosition()
         {
-            ScoreCounter.I.SetNewScore(Weight);
-            Destroy(this.gameObject);
+            var mousePosition = Input.mousePosition;
+            mousePosition.z = _camera.transform.position.z;
+            return _camera.ScreenToWorldPoint(mousePosition);
         }
 
         private void StartDrag()
@@ -89,12 +87,15 @@ namespace Runtime.CardLogic
             transform.DOScale(1f, 0.15f);
             transform.position = _startPosition;
         }
-
-        private Vector3 GetMouseWorldPosition()
+        
+        private void OnCardPlaced()
         {
-            var mousePosition = Input.mousePosition;
-            mousePosition.z = _camera.transform.position.z;
-            return _camera.ScreenToWorldPoint(mousePosition);
+            Destroy(this.gameObject);
+        }
+        
+        private void OnDestroy()
+        {
+            transform.DOKill();
         }
         
         private void OnTriggerStay2D(Collider2D other)
@@ -116,11 +117,6 @@ namespace Runtime.CardLogic
             
             transform.DOScale(1f, 0.15f);
             _inside = false;
-        }
-        
-        private void OnDestroy()
-        {
-            transform.DOKill();
         }
     }
 }

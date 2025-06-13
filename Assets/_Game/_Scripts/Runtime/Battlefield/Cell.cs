@@ -1,4 +1,3 @@
-using Runtime.CardLogic;
 using Runtime.CardLogic.CardUnits;
 using UnityEngine;
 
@@ -31,7 +30,9 @@ namespace Runtime.Battlefield
             
             _currentUnit = unit;
             Vector3 unitPosition = new(this.transform.position.x, this.transform.position.y - 0.3f, this.transform.position.z);
-            Instantiate(_currentUnit, unitPosition, Quaternion.identity);
+            var newUnit = Instantiate(_currentUnit, unitPosition, Quaternion.identity);
+            newUnit.TryGetComponent<CardUnit>(out var unitModule);
+            unitModule.OnUnitPlaced();
         }
 
         internal void Clear()
