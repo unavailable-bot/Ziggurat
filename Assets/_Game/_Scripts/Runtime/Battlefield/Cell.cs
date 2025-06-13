@@ -25,11 +25,11 @@ namespace Runtime.Battlefield
             }
         }
 
-        internal void PlaceCard(GameObject card)
+        internal void PlaceCard(GameObject unit)
         {
             if(!IsEmpty) return;
             
-            _currentUnit = card;
+            _currentUnit = unit;
             Vector3 unitPosition = new(this.transform.position.x, this.transform.position.y - 0.3f, this.transform.position.z);
             Instantiate(_currentUnit, unitPosition, Quaternion.identity);
         }

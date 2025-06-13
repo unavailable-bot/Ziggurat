@@ -9,13 +9,10 @@ namespace Core
         private int score;
         private TMP_Text scoreText;
 
-        private void Awake()
+        internal void Initialize()
         {
             I = this;
-        }
-
-        private void Start()
-        {
+            
             scoreText = GetComponent<TMP_Text>();
             scoreText.text = score.ToString();
         }

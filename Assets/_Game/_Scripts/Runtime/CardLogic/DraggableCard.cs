@@ -2,7 +2,6 @@ using Core;
 using Runtime.Battlefield;
 using UnityEngine;
 using DG.Tweening;
-using Runtime.CardLogic.CardUnits;
 
 namespace Runtime.CardLogic
 {
@@ -11,8 +10,8 @@ namespace Runtime.CardLogic
     {
         private Tween _scaleTween;
         
-        [SerializeField] private LayerMask _callLayerMask;
         [SerializeField] private GameObject _unit;
+        private LayerMask _callLayerMask;
         
         private Camera _camera;
         private Vector3 _startPosition;
@@ -20,35 +19,43 @@ namespace Runtime.CardLogic
         private bool _inside;
 
         protected abstract int Weight {get;}
-        protected int Unit {get;}
         
         private void Start()
         {
             _camera = Camera.main;
+            _callLayerMask = LayerMask.GetMask("layCell");
         }
-
+        
         private void Update()
         {
             if (!_isDragging && Input.GetMouseButtonDown(0))
             {
-                Vector2 mousePosition = GetMouseWorldPosition();
-                var hit = Physics2D.OverlapPoint(mousePosition, LayerMask.GetMask($"layCard"));
-                if (hit && hit.transform == this.transform)
-                {
-                    StartDrag();
-                }
+                HandleStartDrag();
             }
 
-            if (_isDragging)
+            if (!_isDragging) return;
+            // ReSharper disable once Unity.PerformanceCriticalCodeInvocation
+            HandleDragging();
+        }
+
+        private void HandleStartDrag()
+        {
+            var startMousePosition = GetMouseWorldPosition();
+            var hit = Physics2D.OverlapPoint(startMousePosition, LayerMask.GetMask($"layCard"));
+            if (hit && hit.transform == this.transform)
             {
-                Vector3 mousePosition = GetMouseWorldPosition();
-                Vector3 targetPosition = new Vector3(mousePosition.x, mousePosition.y, this.transform.position.z);
-                transform.position = Vector3.Lerp(this.transform.position, targetPosition, Time.deltaTime * 20f);
-                if (Input.GetMouseButtonUp(0))
-                    // ReSharper disable once Unity.PerformanceCriticalCodeInvocation
-                    EndDrag();
-                    
+                StartDrag();
             }
+        }
+
+        private void HandleDragging()
+        {
+            var dragMousePosition = GetMouseWorldPosition();
+            var targetPosition = new Vector3(dragMousePosition.x, dragMousePosition.y, this.transform.position.z);
+            transform.position = Vector3.Lerp(this.transform.position, targetPosition, Time.deltaTime * 20f);
+            if (Input.GetMouseButtonUp(0))
+                // ReSharper disable once Unity.PerformanceCriticalCodeInvocation
+                EndDrag();
         }
 
         private void OnCardPlaced()
@@ -66,8 +73,8 @@ namespace Runtime.CardLogic
         private void EndDrag()
         {
             _isDragging = false;
-            Vector2 mouseWorldPosition = GetMouseWorldPosition();
-            Collider2D hit = Physics2D.OverlapPoint(mouseWorldPosition, _callLayerMask);
+            var mouseWorldPosition = GetMouseWorldPosition();
+            var hit = Physics2D.OverlapPoint(mouseWorldPosition, _callLayerMask);
             if (hit)
             {
                 // ReSharper disable once Unity.PerformanceCriticalCodeInvocation
@@ -79,43 +86,41 @@ namespace Runtime.CardLogic
                     return;
                 }
             }
-            transform.DOScale(1f, 0.15f); // вернём к нормальному масштабу
+            transform.DOScale(1f, 0.15f);
             transform.position = _startPosition;
         }
 
         private Vector3 GetMouseWorldPosition()
         {
-            Vector3 mousePosition = Input.mousePosition;
+            var mousePosition = Input.mousePosition;
             mousePosition.z = _camera.transform.position.z;
             return _camera.ScreenToWorldPoint(mousePosition);
         }
         
         private void OnTriggerStay2D(Collider2D other)
         {
-            if (!_inside && _isDragging)
-            {
-                Vector3 mouseWorldPosition = GetMouseWorldPosition();
-                Collider2D hit = Physics2D.OverlapPoint(mouseWorldPosition, _callLayerMask);
-                if (hit)
-                {
-                    transform.DOScale(0.5f, 0.15f);
-                    _inside = true;
-                }
-            }
+            if (_inside || !_isDragging) return;
+            
+            var mouseWorldPosition = GetMouseWorldPosition();
+            var hit = Physics2D.OverlapPoint(mouseWorldPosition, _callLayerMask);
+                
+            if (!hit) return;
+                
+            transform.DOScale(0.5f, 0.15f);
+            _inside = true;
         }
 
         private void OnTriggerExit2D(Collider2D other)
         {
-            if (other.gameObject.name == "BattleField" && _isDragging)
-            {
-                transform.DOScale(1f, 0.15f); // вернём к нормальному масштабу
-                _inside = false;
-            }
+            if (other.gameObject.name != "BattleField" || !_isDragging) return;
+            
+            transform.DOScale(1f, 0.15f);
+            _inside = false;
         }
         
         private void OnDestroy()
         {
-            transform.DOKill(); // убьёт все анимации, связанные с этим объектом
+            transform.DOKill();
         }
     }
 }

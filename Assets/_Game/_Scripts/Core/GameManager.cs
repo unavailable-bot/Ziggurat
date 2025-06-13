@@ -19,7 +19,7 @@ namespace Core
             Blue
         }
 
-        private void Awake()
+        internal void Initialize()
         {
             I = this;
             
@@ -44,11 +44,11 @@ namespace Core
         private void SetBankColor(FirstPlayer color)
         {
             var firstBank = Instantiate(_bankPrefab, new Vector3(15.5f, -5.5f, 0), _bankPrefab.transform.rotation);
-            Bank firstBankComponent = firstBank.GetComponent<Bank>();
+            var firstBankComponent = firstBank.GetComponent<Bank>();
             firstBankComponent.Init((BankColor)color);
             
             var secondBank = Instantiate(_bankPrefab, new Vector3(15.5f, 5.5f, 0), _bankPrefab.transform.rotation);
-            Bank secondBankComponent = secondBank.GetComponent<Bank>();
+            var secondBankComponent = secondBank.GetComponent<Bank>();
             secondBankComponent.Init(color == FirstPlayer.Red ? BankColor.Blue : BankColor.Red);
 
             RedBank = firstBankComponent.BankColor == (BankColor)color ? firstBankComponent : secondBankComponent;

@@ -1,7 +1,3 @@
-using Core;
-using Runtime.CardLogic.CardUnits;
-using UnityEngine;
-
 namespace Runtime.CardLogic
 {
     public class RedSCLogic : DraggableCard

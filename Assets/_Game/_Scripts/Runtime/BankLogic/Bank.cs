@@ -33,7 +33,6 @@ namespace Runtime.BankLogic
             
             LoadAllCards();
             ShuffleDeck();
-            // можно добавить Setup: UI, камера и т.д.
         }
         
         private void LoadAllCards()

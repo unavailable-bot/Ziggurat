@@ -1,7 +1,6 @@
 using UnityEngine;
 using System.Collections.Generic;
 using Core;
-using Runtime.BankLogic;
 
 namespace Runtime.DeckLogic
 {
@@ -18,23 +17,20 @@ namespace Runtime.DeckLogic
         
         private PlayerColor PlayerColor { get; set; }
         private bool isFirstPlayer;
-
-        private void Start()
-        {
-            maxCard = isFirstPlayer ? 5 : 6;
-            Debug.Log($"Color: {PlayerColor} | First player? {isFirstPlayer}");
-            GetStartDeck(maxCard);
-        }
         
         internal void Init(PlayerColor color, int playerNumber)
         {
             PlayerColor = color;
             isFirstPlayer = playerNumber == 1;
+            
+            maxCard = isFirstPlayer ? 5 : 6;
+            Debug.Log($"Color: {PlayerColor} | First player? {isFirstPlayer}");
+            GetStartDeck(maxCard);
         }
 
         private void GetStartDeck(int cardCount)
         {
-            Bank myBank = PlayerColor == PlayerColor.Red ? GameManager.I.RedBank : GameManager.I.BlueBank;
+            var myBank = PlayerColor == PlayerColor.Red ? GameManager.I.RedBank : GameManager.I.BlueBank;
             
             for (int i = 0; i < cardCount; i++)
             {
@@ -45,7 +41,7 @@ namespace Runtime.DeckLogic
                     return;
                 }
                 var instance = Instantiate(cardPrefab, Vector3.zero, Quaternion.identity, this.transform);
-                instance.transform.localPosition = new Vector3(cardXCoo[i], 0f, 0f); // точно локально!
+                instance.transform.localPosition = new Vector3(cardXCoo[i], 0f, 0f);
                 cards.Add(instance);
             }
         }
